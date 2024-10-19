@@ -1,0 +1,39 @@
+1. env setup:
+python-chess
+pandas
+collections (specifically counter for counting move frequencies)
+seaborn or matplotlib
+maybe tqdm for progress bars during processing
+
+2. get data:
+download .pgn.bz2 games off lichess open database
+since they come compressed, use pythons bz2 module to read data without decompressing file
+use python-chess's chess.pgn module to parse games one by one
+
+3. iterative processing:
+process games in a streaming fashion to avoid loading entire dataset into memory
+maybe test with a subset first
+
+4. data preprocessing and analysis
+use game.mainline_moves() to get moves
+use board.san(move) to get standard algebraic notation for each move
+(investigate the python-chess docs to see if there's a better way to do this)
+initialize a counter (collections.Counter) and for each move in SAN increment the count
+loop through all games in dataset (how to handle exceptions or incomplete games)
+
+5. identify rare moves
+convert the Counter to a list of tuples (move,frequency)  (at this point the frequency data is stored in a Counter object, which is a subclass of python's dict which is good for counting hashable objects)
+decide how to determine rarity (is it just moves that occur the least amount of times)
+create a new list or dataframe containing the moves under a certain rarity threshold
+(optionally is there a way to consider context of rare move, ex: specific openings or player ratings)
+
+6. data visualization:
+organize rare moves and frequencies to my liking and then create a pandas dataframe
+select a visualization type appropriate for type of data (no clue tbh)
+generate plots with seaborn or matplotlib
+draw inferences
+
+7. optimize and scale:
+make the loading of the original data, parsing of it, and sorting as efficient as possible so this can be repeated for larger datasets (multiprocessing?)
+unit tests along the way for critical functions
+
